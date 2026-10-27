@@ -1,0 +1,20 @@
+# Second application: offline meetups on SNAP Gowalla (Cho, Myers & Leskovec, KDD 2011).
+#   python -m lacs geo-all -c configs/gowalla.yaml        (CPU only)
+# geo-e2 uses search.k; scripts/run_round3.sh passes the k recommended by G3-geo (else 3).
+name: gowalla
+out_dir: runs/gowalla
+geo:
+  edges: data/raw/snap/loc-gowalla_edges.txt.gz
+  checkins: data/raw/snap/loc-gowalla_totalCheckins.txt.gz
+  split: [0.7, 0.1, 0.2]          # global time split of check-ins
+  min_train_checkins: 10          # users with fewer training check-ins get no home / tolerance
+  home_cell_deg: 0.25             # home = median position in the most frequent ~25 km cell
+  tolerance_quantiles: [0.5, 0.7, 0.9]   # candidate tolerances; G2-geo picks one by cross-fitting on validation co-visits
+  tolerance_floor_km: 1.0
+  max_bucket_users: 500           # venue-days with more users are skipped when finding co-visits
+gates: {g3_min_median: 5}
+search:
+  k: 3
+  n_queries: 200
+  time_limit: 60
+  n_proc: 8

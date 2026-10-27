@@ -1,0 +1,41 @@
+# ChangeMyView "Winning Arguments" (ConvoKit winning-args-corpus): binary task,
+# receiver = original poster, judged message = top-level challenger reply,
+# label = delta awarded (accept) or not.
+#   python -m lacs all -c configs/cmv.yaml
+name: cmv
+out_dir: runs/cmv
+dataset:
+  type: cmv
+  raw: data/raw/winning-args-corpus   # unzipped ConvoKit corpus (or "convokit" to download)
+encoder:
+  backend: sbert
+  model: sentence-transformers/all-mpnet-base-v2
+  batch_size: 256
+  device: cuda
+pca_dim: 128
+anchors:
+  receiver_repr: op_post              # the OP's stated view is the anchor
+  source_repr: anchor
+features:
+  psych_csv: null
+model:
+  proj_dim: [8, 16]
+  l2_W: [0.3, 3.0]
+  l2_w: [1.0]
+  l2_b: [1.0, 10.0]
+  max_iter: 400
+  band: false                         # true: P(delta) = s((a-d)/T) * s((d-delta)/T)  (SJT "moderate discrepancy")
+  n_jobs: 8
+baselines: [prior, dist_logit, mf, balance]
+graph:
+  metapaths:
+    - {name: reply}
+search:
+  k: 2
+  n_queries: 200
+  time_limit: 120
+  query_pool: test_active
+  methods: [lcc_c_exact, lcc_c_greedy, lcc_c_ballcore_r, pairwise_c, kcore, kr_global, edgeacc, cluster_q,
+            random_bfs]
+simulation:
+  n_jobs: 8

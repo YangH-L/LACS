@@ -1,0 +1,49 @@
+# W2 run B: E3 with engine v0.5 on four more SNAP graphs, default setting only (k = 3, 200 queries).
+#   python -m lacs e3 -c configs/efficiency_w2_graphs.yaml
+# The edge lists are downloaded by scripts/fetch_snap_w2.sh. Friendster (1.8 billion edges) is
+# converted in two passes and never loaded into Python (lowmem, light); it runs last, so a
+# failure there leaves the other graphs' results intact (each dataset is checkpointed).
+name: efficiency_w2_graphs
+out_dir: runs/efficiency_w2_graphs
+efficiency:
+  # expect_m: undirected edges after conversion (SNAP); a mismatch is logged and recorded, not fatal.
+  # Friendster: no k-core reference (one BFS over its ~65M-vertex k-core takes about a minute per query),
+  # a shorter calibration grid, and one engine process per setting for all algorithms without flags.
+  datasets:
+    - {name: dblp, edges: data/raw/snap/com-dblp.ungraph.txt, expect_m: 1049866}
+    - {name: youtube, edges: data/raw/snap/com-youtube.ungraph.txt, expect_m: 2987624}
+    - {name: pokec, edges: data/raw/snap/soc-pokec-relationships.txt, expect_m: 22301964}
+    - name: friendster
+      edges: data/raw/snap/com-friendster.ungraph.txt
+      expect_m: 1806067135
+      lowmem: true
+      light: true
+      batch_algos: true
+      override:
+        algos: [ballcore_f, ballcore_r, greedy, exact, kr_greedy]
+        calibration_scales: [0.75, 1.0, 1.25, 1.5, 2.0]
+        calibration_refine: 1
+  algos: [kcore, ballcore_f, ballcore_r, greedy, exact, kr_greedy]
+  ablation_algos: [exact_v04]
+  attr_model: communities
+  community_max_size: 1000
+  query_min_community: 20
+  city_spacing: 8.0
+  theta_scale_default: auto
+  calibration_target: 10
+  calibration_queries: 30
+  calibration_time_limit: 5
+  calibration_scales: [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0]
+  calibration_refine: 2
+  default_k: 3
+  default_dim: 16
+  ks: [3]
+  fractions: []
+  dims: []
+  theta_scales: []
+  theta_sigma: 0.4
+  n_queries: 200
+  time_limit: 60
+  n_proc: 1
+  resume: true
+  dataset_budget_h: 6.0

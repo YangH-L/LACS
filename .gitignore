@@ -1,0 +1,9 @@
+runs/
+runs_p0/
+runs_p2/
+data/
+cpp/build/
+p0/p0kit/_lib/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/

@@ -1,0 +1,238 @@
+{
+  "created": "2026-10-25T17:20:37+00:00",
+  "files": {
+    "LICENSE_CongressionalTwitterNetwork.txt": {
+      "sha256": "451401324b37ef50a82c3e08abe51f5eeda1b541526df3b21b85e9ae1996f126",
+      "source": "https://github.com/gsprint23/CongressionalTwitterNetwork commit 205ca40d973e13944051e1e44240d005a9b1a1bc, LICENSE.txt"
+    },
+    "congress_network_data.json": {
+      "sha256": "ee6d2fc1a2ac07e6481d41c0df463e2e7c5c0db4ae964980b43233e5c7253712",
+      "size": 726936,
+      "source": "https://github.com/gsprint23/CongressionalTwitterNetwork",
+      "commit": "205ca40d973e13944051e1e44240d005a9b1a1bc",
+      "path_in_repo": "congress_network_data.json",
+      "license": "MIT (Copyright (c) 2023 Gina Sprint); see LICENSE_CongressionalTwitterNetwork.txt",
+      "references": [
+        "Fink et al., A centrality measure for quantifying spread on weighted, directed networks, Physica A (2023), doi:10.1016/j.physa.2023.129083",
+        "Fink et al., A Congressional Twitter network dataset quantifying pairwise probability of influence, Data in Brief (2023)"
+      ],
+      "accounts": 475,
+      "directed_edges": 13289,
+      "tweet_period": [
+        "2022-02-09",
+        "2022-06-09"
+      ],
+      "edge_semantics": "outList[i] = nodes receiving connections FROM i: edge i->j means j retweeted, quoted, replied to or mentioned i; weight = count / number of tweets by i"
+    },
+    "crosswalk.csv": {
+      "sha256": "81c564f4821b19d1d97f4e59cc8c0ff0409170b9d9ce1b8559496650ecbeb35d",
+      "size": 26964,
+      "generated_by": "e6/make_crosswalk.py",
+      "rows": 475,
+      "auto": 461,
+      "manual": 14,
+      "unique_bioguides": 475,
+      "sources": {
+        "repo": "https://github.com/unitedstates/congress-legislators",
+        "commit": "b6c8c0bd07e48f96ff077ceec08aaff139e34496",
+        "commit_date": "2022-05-26",
+        "license": "CC0-1.0 (public domain)",
+        "files": {
+          "legislators-current.yaml": "fa595d38da349384e09436c73f3abb267bf8f06c2c4cab53876905e1cf576c7c",
+          "legislators-social-media.yaml": "0c28a2c63c6d8f0449d7a379f96e66253ca9f3ed9e9010d5f9e8cfa48352dedb",
+          "legislators-historical.yaml": "fd7034d255c05b1cfe05a3c01944cd628774aa74b4e5cd87770d518630ceb9be"
+        }
+      },
+      "method": "auto = handle equals social.twitter (case-insensitive) in legislators-social-media.yaml; manual = plan appendix, checked against the YAML (name, state, chamber, term in the tweet period)"
+    }
+  },
+  "plan_literal_duplicate_bioguides": {
+    "M000194": [
+      "CongresswomanSC",
+      "RepNancyMace"
+    ]
+  },
+  "corrections": [
+    {
+      "handle": "CongresswomanSC",
+      "plan": {
+        "bioguide": "M000194",
+        "name": "Nancy Mace",
+        "chamber": "House",
+        "state": "SC"
+      },
+      "used": {
+        "bioguide": "C001127",
+        "name": "Sheila Cherfilus-McCormick",
+        "chamber": "House",
+        "state": "FL"
+      },
+      "reason": "plan appendix maps CongresswomanSC to M000194 (Nancy Mace), but M000194 is already matched automatically via RepNancyMace, also in the network (bioguide would appear twice). CongresswomanSC is Sheila Cherfilus-McCormick (C001127, House FL-20, from 2022-01-18; 'SC' = her initials); she has no Twitter entry in the 2022-05 social table and the account's network neighbours are Democrats, mostly from Florida (see evidence)."
+    }
+  ],
+  "correction_evidence": {
+    "CongresswomanSC": {
+      "neighbours": 34,
+      "matched_neighbours_by_state_party": {
+        "FL-D": 10,
+        "IL-D": 4,
+        "CA-D": 4,
+        "NY-D": 3,
+        "CT-D": 2,
+        "MO-D": 1,
+        "MI-D": 1,
+        "CO-D": 1,
+        "NV-D": 1,
+        "FL-R": 1,
+        "GA-D": 1,
+        "KY-D": 1,
+        "MA-D": 1,
+        "AZ-D": 1,
+        "OK-R": 1,
+        "MD-D": 1
+      }
+    }
+  },
+  "manual_checks": [
+    {
+      "handle": "CoryBooker",
+      "bioguide": "B001288",
+      "yaml_file": "current",
+      "yaml_name": "Cory A. Booker",
+      "yaml_chamber": "Senate",
+      "yaml_state": "NJ",
+      "ok": true,
+      "problems": []
+    },
+    {
+      "handle": "SenGillibrand",
+      "bioguide": "G000555",
+      "yaml_file": "current",
+      "yaml_name": "Kirsten E. Gillibrand",
+      "yaml_chamber": "Senate",
+      "yaml_state": "NY",
+      "ok": true,
+      "problems": []
+    },
+    {
+      "handle": "LindseyGrahamSC",
+      "bioguide": "G000359",
+      "yaml_file": "current",
+      "yaml_name": "Lindsey Graham",
+      "yaml_chamber": "Senate",
+      "yaml_state": "SC",
+      "ok": true,
+      "problems": []
+    },
+    {
+      "handle": "HawleyMO",
+      "bioguide": "H001089",
+      "yaml_file": "current",
+      "yaml_name": "Josh Hawley",
+      "yaml_chamber": "Senate",
+      "yaml_state": "MO",
+      "ok": true,
+      "problems": []
+    },
+    {
+      "handle": "timkaine",
+      "bioguide": "K000384",
+      "yaml_file": "current",
+      "yaml_name": "Tim Kaine",
+      "yaml_chamber": "Senate",
+      "yaml_state": "VA",
+      "ok": true,
+      "problems": []
+    },
+    {
+      "handle": "ChrisMurphyCT",
+      "bioguide": "M001169",
+      "yaml_file": "current",
+      "yaml_name": "Christopher Murphy",
+      "yaml_chamber": "Senate",
+      "yaml_state": "CT",
+      "ok": true,
+      "problems": []
+    },
+    {
+      "handle": "ossoff",
+      "bioguide": "O000174",
+      "yaml_file": "current",
+      "yaml_name": "Jon Ossoff",
+      "yaml_chamber": "Senate",
+      "yaml_state": "GA",
+      "ok": true,
+      "problems": []
+    },
+    {
+      "handle": "RandPaul",
+      "bioguide": "P000603",
+      "yaml_file": "current",
+      "yaml_name": "Rand Paul",
+      "yaml_chamber": "Senate",
+      "yaml_state": "KY",
+      "ok": true,
+      "problems": []
+    },
+    {
+      "handle": "marcorubio",
+      "bioguide": "R000595",
+      "yaml_file": "current",
+      "yaml_name": "Marco Rubio",
+      "yaml_chamber": "Senate",
+      "yaml_state": "FL",
+      "ok": true,
+      "problems": []
+    },
+    {
+      "handle": "CongresswomanSC",
+      "bioguide": "C001127",
+      "yaml_file": "current",
+      "yaml_name": "Sheila Cherfilus-McCormick",
+      "yaml_chamber": "House",
+      "yaml_state": "FL",
+      "ok": true,
+      "problems": []
+    },
+    {
+      "handle": "repdelgado",
+      "bioguide": "D000630",
+      "yaml_file": "historical",
+      "yaml_name": "Antonio Delgado",
+      "yaml_chamber": "House",
+      "yaml_state": "NY",
+      "ok": true,
+      "problems": []
+    },
+    {
+      "handle": "Lancegooden",
+      "bioguide": "G000589",
+      "yaml_file": "current",
+      "yaml_name": "Lance Gooden",
+      "yaml_chamber": "House",
+      "yaml_state": "TX",
+      "ok": true,
+      "problems": []
+    },
+    {
+      "handle": "claudiatenney",
+      "bioguide": "T000478",
+      "yaml_file": "current",
+      "yaml_name": "Claudia Tenney",
+      "yaml_chamber": "House",
+      "yaml_state": "NY",
+      "ok": true,
+      "problems": []
+    },
+    {
+      "handle": "michaelgwaltz",
+      "bioguide": "W000823",
+      "yaml_file": "current",
+      "yaml_name": "Michael Waltz",
+      "yaml_chamber": "House",
+      "yaml_state": "FL",
+      "ok": true,
+      "problems": []
+    }
+  ]
+}

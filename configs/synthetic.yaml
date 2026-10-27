@@ -1,0 +1,35 @@
+# End-to-end smoke test on synthetic data with a known SJT ground truth.
+# CPU only (TF-IDF encoder), runs in a few minutes:
+#   python -m lacs all -c configs/synthetic.yaml
+name: synthetic
+out_dir: runs/synthetic
+dataset:
+  type: synthetic
+  raw: data/raw/synthetic          # generated on first use
+  synthetic: {n_users: 500, n_threads: 260, seed: 0}
+encoder:
+  backend: tfidf
+  tfidf_dim: 128
+pca_dim: 64
+features:
+  psych_csv: data/raw/synthetic/psych.csv
+model:
+  proj_dim: [4, 8]
+  l2_W: [0.3, 3.0]
+  l2_w: [1.0]
+  l2_b: [3.0, 30.0]
+  max_iter: 300
+  n_jobs: 2
+search:
+  k: 3
+  n_queries: 50
+  time_limit: 30
+  cluster_k: 8
+  n_proc: 2
+  methods: [lcc_c_exact, lcc_c_greedy, lcc_c_ballcore_f, lcc_c_ballcore_r, lcc_r_exact, pairwise_c,
+            kcore, kr_global, edgeacc, cluster_q, random_bfs, lcc_c_exact@global]
+simulation:
+  max_steps: 300
+  n_jobs: 2
+gates:
+  g3_queries: 80

@@ -1,0 +1,16 @@
+# Offline-meetup application on a small synthetic LBSN with a planted travel tolerance (CPU, ~1 minute).
+#   python -m lacs geo-all -c configs/geo_synthetic.yaml
+name: geo_synthetic
+out_dir: runs/geo_synthetic
+geo:
+  synthetic: {dir: data/raw/geo_synthetic, n_users: 600, n_days: 300, seed: 0}
+  edges: data/raw/geo_synthetic/edges.txt
+  checkins: data/raw/geo_synthetic/checkins.txt
+  min_train_checkins: 10
+  tolerance_quantiles: [0.5, 0.7, 0.9]
+gates: {g3_min_median: 5}
+search:
+  k: 3
+  n_queries: 60
+  time_limit: 20
+  n_proc: 2

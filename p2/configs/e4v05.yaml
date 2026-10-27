@@ -1,0 +1,27 @@
+# P2-5 (docs/PLANS.md (lacs_p2_plan_20261026) section 5): P0's E4 settings on the round-3 instances, engine v0.5.
+# Identical to p0/configs/p0.yaml except: out_root, the absolute (read-only) round-3 run, and algos_sweep
+# (exact and greedy only; the other methods do not use the v0.5 changes and are not rerun).
+#   PYTHONPATH=p0:. python -m p2.e4v05 run --config p2/configs/e4v05.yaml --dataset livejournal --experiment e4_scale
+out_root: runs_p2/e4v05
+seed: 0
+e3_run: runs/efficiency_round3
+k: 3
+time_limit: 60                     # exact, as in the paper and P0
+time_limit_baselines: 10           # greedy, as in P0
+n_proc: 8                          # as in P0 (timings comparable)
+members_max: 5000
+algos_sweep: [exact, greedy]
+experiments:
+  e4_scale:
+    settings:
+      - {name: c0.5, c: 0.5}
+      - {name: c0.75, c: 0.75}
+      - {name: c1.0, c: 1.0}
+      - {name: c1.5, c: 1.5}
+      - {name: c2.0, c: 2.0}
+  e4_mix:
+    settings:
+      - {name: mu0.1, mu: 0.1}
+      - {name: mu0.2, mu: 0.2}
+      - {name: mu0.4, mu: 0.4}
+  e4_queries: {n: 200, seed: 7}

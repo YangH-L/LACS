@@ -1,0 +1,12 @@
+# P2-4b (plan section 4.4): equal-weight HK on G[H] for the LCC groups found with s = 0.8 and s = 1, with the
+# dynamics' tolerances drawn around the estimate as in P0 (theta_true = theta * exp(0.3 Z), 10 draws per
+# group, groups up to 2,000 members; P0's hk_eq_G_noise0.3). hk_eq_G without noise is the theorem check
+# (an LCC group found with s <= 1 satisfies (iii) for theta, so it must never lose an interaction).
+seed: 20261027
+max_group: 5000
+ext_max_neighbors: 200
+margin: 1.0e-6
+defaults: {T_max: 300, rounds: 100, move_tol_rel: 1.0e-6, rel_eps: 1.0e-9, diam_every: 10, cons_rel: 1.0e-3, cluster_rel: 1.0e-3}
+variants:
+  - {name: hk_eq_G, model: hk, graph: G, weights: equal}
+  - {name: hk_eq_G_noise0.3, model: hk, graph: G, weights: equal, theta_noise: 0.3, runs: 10, max_n: 2000}

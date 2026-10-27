@@ -1,0 +1,29 @@
+# E6 Q4 (docs/PLANS.md (lacs_e6_plan_20261025) section 8): the geo-e2 pipeline on the Congress data built by
+# python -m e6.build (positions = DW-NOMINATE dim1 as (x, 0, 0); tolerances from cosponsorship; graph =
+# Twitter; outcome = joining the same bill in the test window 2022-06-10..2023-01-03). Units are
+# DW-NOMINATE units even where a column is called *_km. Also the source of the groups of Q2 and Q3
+# (python -m p0kit.export_groups geo --config configs/e6_congress.yaml --out runs/e6/e1_input).
+name: e6
+out_dir: runs/e6
+seed: 20261025
+geo:
+  tolerance_fixed: theta_q50
+  alt_outcomes: [notop]
+  queries: all
+  methods: [lcc_exact, lcc_greedy, lcc_ballcore_f, lcc_ballcore_r, pairwise, kcore, kr_global, kr_tau, sac,
+            sac_sized, edgeacc, random_bfs]
+  member_analysis: [sac, kr_global, kr_tau]
+  abstention: [sac, kr_global]
+  g3_k: [2, 3, 4, 5]
+  g3_queries: 200
+  e2_sweep_k: [2, 3, 4, 5]
+  e2_sweep_k_queries: all
+  e2_sweep_tolerances: [theta_q50, theta_q70, theta_q90]
+  sweep_tolerance_queries: 100000   # = all eligible queries
+  engine_block: 0
+gates: {g3_min_median: 5}
+search:
+  k: 3
+  n_queries: 2000
+  time_limit: 60
+  n_proc: 12

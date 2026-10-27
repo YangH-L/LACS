@@ -1,0 +1,9 @@
+# P0 kit (p0/). Everything except ortools is already in the project's requirements.txt.
+numpy>=1.23
+scipy>=1.9          # scipy.optimize.milp (HiGHS) for the MILP baseline of E3
+pandas>=1.5
+pyyaml>=6.0
+matplotlib>=3.5
+# optional: CP-SAT baseline of E3 (skipped with a note in the log when missing)
+# ortools>=9.8
+# build: g++ >= 9 with C++17 (p0/build.sh); no numba, no GPU

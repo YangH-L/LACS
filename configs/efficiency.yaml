@@ -1,0 +1,34 @@
+# E3 efficiency / scalability template. Runs only the C++ engine (CPU).
+#   python -m lacs e3 -c configs/efficiency.yaml
+# The configuration used for the paper is configs/efficiency_round3.yaml.
+name: efficiency
+out_dir: runs/efficiency
+efficiency:
+  datasets:
+    # dataset types (see lacs/experiments/e3.py):
+    # - {name: gowalla, geo_run: runs/gowalla}                       real homes and travel tolerances
+    # - {name: livejournal, edges: data/raw/snap/com-lj.ungraph.txt}  synthetic attributes (attr_model)
+    # - {name: twitter, graph_bin: data/graphs/twitter.bin}
+    # - {name: amazon_books, bipartite: data/raw/amazon_user_item.txt, max_right_degree: 500}
+    # - {name: debagreement, from_run: runs/debagreement, variant: full}   learned (uninformative in round 1)
+    - {name: livejournal, edges: data/raw/snap/com-lj.ungraph.txt}
+  algos: [kcore, ballcore_f, ballcore_r, greedy, exact, kr_greedy]
+  ablation_algos: [exact_noindex, exact_nolocal, exact_basic]
+  attr_model: communities            # communities | voronoi | smoothed
+  community_max_size: 1000
+  query_min_community: 20
+  theta_scale_default: auto
+  default_k: 3
+  default_dim: 16
+  ks: [2, 3, 4, 5]
+  fractions: [0.25, 0.5, 0.75, 1.0]
+  dims: [2, 4, 8, 16, 32]
+  theta_scales: [0.5, 1.0, 2.0]
+  theta_scales_relative: true
+  theta_sigma: 0.4
+  n_queries: 50
+  time_limit: 60                     # seconds per query for exact search
+  n_proc: 1                          # keep 1 for clean timings (parallel processes compete for memory bandwidth)
+  resume: false                      # true: skip datasets whose checkpoint matches this configuration
+  dataset_budget_h: 0                # > 0: skip settings that would start after this many hours on a dataset
+  calibration_refine: 2              # bisection steps after the calibration grid

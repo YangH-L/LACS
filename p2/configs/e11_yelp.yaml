@@ -1,0 +1,18 @@
+# E11 / P2-4 on E5's Yelp inputs (definition G, precovid). `p2.e11 prepare-inputs` copies geo/ and graph/ of
+# runs/e5_main into out_dir first (user-level data: stays on the server, never bundled).
+# Queries: the 2,000 of E5's parameter study (same seed, same draw), checked with --expect-queries-from.
+name: e11_yelp
+out_dir: runs_p2/e11/yelp
+seed: 20261025                   # E5's seed
+geo:
+  tolerance_fixed: theta_q50
+  queries: sample
+  engine_block: 240              # resumable engine blocks under out_dir/work (12 processes: <= 20 queries each)
+  methods: [lcc_exact]
+  member_analysis: []
+  abstention: []
+search:
+  k: 3
+  n_queries: 2000                # E5: sweep_tolerance_queries = 2000
+  time_limit: 60
+  n_proc: 12

@@ -1,0 +1,17 @@
+# E1 follow-up (E5 plan section 8): open-group sweep on P0's meetup groups (Gowalla, Brightkite).
+# seed / ext_max_neighbors / defaults are P0's (runs_p0/<ds>/e1/default/manifest.json), so the closed
+# hk_eq_G and open_w1 rows reproduce P0's hk_eq_G and hk_open_G group by group.
+seed: 20261023
+max_group: 5000
+ext_max_neighbors: 200
+margin: 1.0e-6
+defaults: {T_max: 300, rounds: 100, move_tol_rel: 1.0e-6, rel_eps: 1.0e-9, diam_every: 10, cons_rel: 1.0e-3, cluster_rel: 1.0e-3}
+variants:
+  - {name: hk_eq_G, model: hk, graph: G, weights: equal}
+  - {name: open_w0.01, open_w: 0.01}
+  - {name: open_w0.02, open_w: 0.02}
+  - {name: open_w0.05, open_w: 0.05}
+  - {name: open_w0.1, open_w: 0.1}
+  - {name: open_w0.2, open_w: 0.2}
+  - {name: open_w0.5, open_w: 0.5}
+  - {name: open_w1, open_w: 1.0}

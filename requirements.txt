@@ -1,0 +1,11 @@
+# core (CPU): data, SJT-Lat, search wrapper, evaluation
+numpy>=1.23
+scipy>=1.9
+pandas>=1.5
+scikit-learn>=1.1
+networkx>=2.8
+pyyaml>=6.0
+matplotlib>=3.5
+joblib>=1.2
+# optional: sentiment-intensity ego feature
+# vaderSentiment>=3.3

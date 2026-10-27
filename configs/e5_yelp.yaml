@@ -1,0 +1,31 @@
+# E5 main experiment (Yelp, split precovid, definition G). Pre-registered plan:
+# docs/PLANS.md (lacs_e5_prereg_draft_20261025). Inputs: python e5/yelp_prepare.py (geo-format files in runs/e5_main).
+#   python -m lacs geo-gates    -c configs/e5_yelp.yaml   (G1-G3: reported, not used as gates)
+#   python -m lacs geo-e2       -c configs/e5_yelp.yaml   (main: k = 3, theta_q50, every eligible query)
+#   python -m lacs geo-e2-sweep -c configs/e5_yelp.yaml   (k = 2..5 and theta_q50/q70/q90, 2,000 queries each)
+name: e5_yelp
+out_dir: runs/e5_main
+seed: 20261025
+geo:
+  max_bucket_users: 500           # gates only: businesses with more reviewers in a period are skipped
+  tolerance_fixed: theta_q50      # plan section 4: G2's pick is reported only
+  alt_outcomes: [month, notop]    # plan section 3: robustness metrics (reported, not tested)
+  queries: all                    # main analysis: all 10,363 eligible queries
+  methods: [lcc_exact, lcc_greedy, lcc_ballcore_f, lcc_ballcore_r, pairwise, kcore, kr_global, kr_tau, sac,
+            sac_sized, edgeacc, random_bfs]
+  member_analysis: [sac, kr_global, kr_tau]
+  abstention: [sac, kr_global]
+  g3_k: [2, 3, 4, 5]
+  g3_queries: 200
+  e2_sweep_k: [2, 3, 4, 5]
+  e2_sweep_k_queries: sample      # plan section 4 (user, 10-25): 2,000 sampled queries per setting
+  e2_sweep_k_n: 2000
+  e2_sweep_tolerances: [theta_q50, theta_q70, theta_q90]
+  sweep_tolerance_queries: 2000
+  engine_block: 1200              # resumable engine calls (cached under runs/e5_main/work)
+gates: {g3_min_median: 5}
+search:
+  k: 3
+  n_queries: 2000                 # only used by modes 'sample'
+  time_limit: 60
+  n_proc: 12

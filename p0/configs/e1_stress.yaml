@@ -1,0 +1,56 @@
+# E1 interaction stress test (variant fields: see p0/p0kit/dynamics.py).
+#   HK, follow and DW use theta_acc = theta. SJT uses theta_rej = theta and theta_acc = acc_ratio * theta,
+#   so a group computed with theta is an LCC^rej there and Theorem 2 applies.
+#   max_n caps the group size per variant: on the complete graph K_H one step costs n^2 distance
+#   evaluations (gossip: about n^3 per round), so the K variants only run on groups up to max_n, and
+#   the multi-run variants on G up to 2000 members (the report gives the coverage per variant).
+#   runs: independent draws (weights, gossip order, tolerance noise).
+seed: 20261023
+max_group: 5000            # larger groups are skipped entirely (k-core components and the like)
+ext_max_neighbors: 200     # outside neighbours per member (random sample above this) for open / ext
+defaults:
+  T_max: 300               # synchronous steps (HK, SJT, follow)
+  rounds: 100              # gossip rounds (DW); one round = |E| random edge activations on average
+  move_tol_rel: 1.0e-6     # stop early when no member moves more than this * initial diameter in a step
+  rel_eps: 1.0e-9          # floating-point slack of every tolerance comparison
+  diam_every: 10           # diameter evaluated every this many steps (every step on K_H; sparser on big groups)
+  cons_rel: 1.0e-3         # consensus: diameter <= cons_rel * initial diameter
+  cluster_rel: 1.0e-3      # final opinion clusters: single linkage at cluster_rel * initial diameter
+
+variants:
+  # ---- the theorems' setting (closed group, tolerances known): LCC groups must never break / reject
+  # the paper's model: HK on G[H] with equal weights (eq. (1))
+  - {name: hk_eq_G,   model: hk, graph: G, weights: equal}
+  # everybody hears everybody (a meeting / group chat)
+  - {name: hk_eq_K,   model: hk, graph: K, weights: equal, max_n: 1000}
+  # unknown heterogeneous influence weights: raw affinities ~ Gamma(alpha), redrawn in each run
+  - {name: hk_rand_G, model: hk, graph: G, weights: dirichlet, runs: 10, max_n: 2000}
+  - {name: hk_rand_K, model: hk, graph: K, weights: dirichlet, runs: 10, max_n: 300}
+  # very concentrated influence -- closest to the adversarial weights of the characterisation
+  # (a pairwise-compatible group with diam > theta_min is broken by *some* weights)
+  - {name: hk_rand_G_a0.1, model: hk, graph: G, weights: dirichlet, dirichlet_alpha: 0.1, runs: 10, max_n: 2000}
+  - {name: hk_rand_K_a0.1, model: hk, graph: K, weights: dirichlet, dirichlet_alpha: 0.1, runs: 10, max_n: 300}
+  # each member follows ONE accepted neighbour per step
+  - {name: follow_G,  model: follow, graph: G, gamma: 0.5, runs: 10, max_n: 2000}
+  - {name: follow_K,  model: follow, graph: K, gamma: 0.5, runs: 10, max_n: 300}
+  # asynchronous pairwise gossip (Deffuant-Weisbuch)
+  - {name: dw_G,      model: dw, graph: G, mu: 0.3, runs: 10, max_n: 2000}
+  - {name: dw_K,      model: dw, graph: K, mu: 0.3, runs: 5, rounds: 50, max_n: 100}
+  # social judgment dynamics with repulsion (eq. (2))
+  - {name: sjt_eq_G,  model: sjt, graph: G, weights: equal, acc_ratio: 0.5, beta: 0.05}
+  - {name: sjt_eq_K,  model: sjt, graph: K, weights: equal, acc_ratio: 0.5, beta: 0.05, max_n: 1000}
+  # stopping-rule check: ten times the horizon, no early stop (compare with hk_eq_G)
+  - {name: hk_eq_G_long, model: hk, graph: G, weights: equal, T_max: 3000, move_tol_rel: 1.0e-12}
+
+  # ---- assumptions violated on purpose (no guarantee; how robust is LCC compared with the baselines?)
+  # open group: members also average with the outside neighbours they accept (held still)
+  - {name: hk_open_G, model: hk, graph: G, weights: equal, open: true}
+  - {name: hk_open_K, model: hk, graph: K, weights: equal, open: true, max_n: 1000}
+  # stubborn outsiders: pull lambda towards the fixed mean of ALL outside neighbours, near or far
+  - {name: hk_eq_G_ext0.01, model: hk, graph: G, weights: equal, lambda_ext: 0.01}
+  - {name: hk_eq_G_ext0.05, model: hk, graph: G, weights: equal, lambda_ext: 0.05}
+  - {name: hk_eq_G_ext0.1,  model: hk, graph: G, weights: equal, lambda_ext: 0.1}
+  # tolerances estimated with error: true = estimated * exp(nu Z)
+  - {name: hk_eq_G_noise0.1, model: hk, graph: G, weights: equal, theta_noise: 0.1, runs: 10, max_n: 2000}
+  - {name: hk_eq_G_noise0.2, model: hk, graph: G, weights: equal, theta_noise: 0.2, runs: 10, max_n: 2000}
+  - {name: hk_eq_G_noise0.3, model: hk, graph: G, weights: equal, theta_noise: 0.3, runs: 10, max_n: 2000}

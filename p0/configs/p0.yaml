@@ -1,0 +1,42 @@
+# P0 experiments on top of LACS v0.4 (run from the project root; see README.md).
+# Inputs are read from the finished rounds and never modified; outputs go to runs_p0/.
+out_root: runs_p0
+seed: 0                            # the seed of round 3 (runs/efficiency_round3/config_resolved.json)
+e3_run: runs/efficiency_round3     # round-3 E3: instances, calibration and queries of LiveJournal / Orkut
+geo_runs: {gowalla: runs/gowalla, brightkite: runs/brightkite}
+k: 3
+
+# E2 / E4 (engine sweeps on the round-3 instances)
+time_limit: 60                     # LatSweep-Exact per query, as in the paper
+time_limit_baselines: 10           # heuristics, pairwise_exact, kr_* (answers stay feasible; status 'timeout')
+n_proc: 8                          # engine processes (queries split); override with --n-proc / P0_NPROC
+members_max: 5000                  # larger groups are kept by size only
+algos_sweep: [exact, greedy, ballcore_f, ballcore_r, kr_greedy, pairwise, kr_tau, edgeacc]
+experiments:
+  e2:                              # heterogeneity of tolerances; sigma 0.4 = the paper's default instance
+    settings:
+      - {name: sigma0.0, sigma: 0.0}   # equal tolerances: LCC = maximum (k,r)-core with q (sanity check)
+      - {name: sigma0.2, sigma: 0.2}
+      - {name: sigma0.4, sigma: 0.4}
+      - {name: sigma0.6, sigma: 0.6}
+      - {name: sigma0.8, sigma: 0.8}
+      - {name: sigma1.0, sigma: 1.0}
+  e4_scale:                        # mean tolerance = c x median friend distance (no calibration on Exact)
+    settings:
+      - {name: c0.5, c: 0.5}
+      - {name: c0.75, c: 0.75}
+      - {name: c1.0, c: 1.0}
+      - {name: c1.5, c: 1.5}
+      - {name: c2.0, c: 2.0}
+  e4_mix:                          # share mu of vertices moved to a random community (nested); mu 0 = e2 sigma0.4
+    settings:
+      - {name: mu0.1, mu: 0.1}
+      - {name: mu0.2, mu: 0.2}
+      - {name: mu0.4, mu: 0.4}
+  e4_queries: {n: 200, seed: 7}    # queries uniform over the k-core (round 3: communities with >= 20 members)
+
+# E3 (sweep harness: the same regions, thresholds, peeling and incumbent for every solver)
+e3:
+  solvers: [bnb, krmax, krmax_simple, ilp, cpsat]   # cpsat needs `pip install ortools`, dropped otherwise
+  time_limit: 60
+  cap: 3000

@@ -1,0 +1,21 @@
+# E12 Q3 (E12 plan section 7): closed and open dynamics on the European Parliament groups, P0's settings.
+# ext_max_neighbors 0: every outside retweet neighbour is used (no sampling; the graph is small).
+seed: 20261029
+max_group: 5000
+ext_max_neighbors: 0
+margin: 1.0e-6
+defaults: {T_max: 300, rounds: 100, move_tol_rel: 1.0e-6, rel_eps: 1.0e-9, diam_every: 10, cons_rel: 1.0e-3, cluster_rel: 1.0e-3}
+variants:
+  - {name: hk_eq_G, model: hk, graph: G, weights: equal}
+  - {name: hk_obs_G, observed: true}
+  - {name: hk_rand_G_a0.1, model: hk, graph: G, weights: dirichlet, dirichlet_alpha: 0.1, runs: 10, max_n: 2000}
+  - {name: follow_G, model: follow, graph: G, gamma: 0.5, runs: 10, max_n: 2000}
+  - {name: dw_G, model: dw, graph: G, mu: 0.3, runs: 10, max_n: 2000}
+  - {name: open_w0.01, open_w: 0.01}
+  - {name: open_w0.02, open_w: 0.02}
+  - {name: open_w0.05, open_w: 0.05}
+  - {name: open_w0.1, open_w: 0.1}
+  - {name: open_w0.2, open_w: 0.2}
+  - {name: open_w0.5, open_w: 0.5}
+  - {name: open_w1, open_w: 1.0}
+  - {name: open_obs_G, observed: true, open: true}

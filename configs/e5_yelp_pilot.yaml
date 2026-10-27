@@ -1,0 +1,17 @@
+# E5 pilot: the main configuration on 120 sampled queries, results in runs/e5_main/results/pilot/.
+# Checks the whole chain on the real data and projects the run time of the main analysis.
+name: e5_yelp
+out_dir: runs/e5_main
+seed: 20261025
+geo:
+  tolerance_fixed: theta_q50
+  alt_outcomes: [month, notop]
+  queries: sample
+  results_subdir: pilot
+  methods: [lcc_exact, lcc_greedy, lcc_ballcore_f, lcc_ballcore_r, pairwise, kcore, kr_global, kr_tau, sac,
+            sac_sized, edgeacc, random_bfs]
+  member_analysis: [sac, kr_global, kr_tau]
+  abstention: [sac, kr_global]
+  engine_block: 0
+gates: {g3_min_median: 5}
+search: {k: 3, n_queries: 120, time_limit: 60, n_proc: 12}

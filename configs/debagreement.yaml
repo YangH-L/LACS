@@ -1,0 +1,50 @@
+# Main dataset (plan: E1, E2, E5). Labels: agree / neutral / disagree.
+#   python -m lacs all -c configs/debagreement.yaml
+name: debagreement
+out_dir: runs/debagreement
+dataset:
+  type: debagreement
+  raw: data/raw/debagreement          # folder (or glob) with the labelled CSV(s); use the >=2/3-agreement set
+  extra_raw: null                     # optional: the unlabelled "original Reddit interactions" files
+  columns: {}                         # override auto-detection, e.g. {time: datetime, thread: submission_id}
+  label_map: null                     # e.g. {0: disagree, 1: neutral, 2: agree}; inferred from Table 1 if null
+encoder:
+  backend: sbert                      # GPU; use tfidf for a CPU dry run
+  model: sentence-transformers/all-mpnet-base-v2
+  batch_size: 256
+  device: cuda
+  fp16: true
+  max_seq_length: 256
+pca_dim: 128
+anchors:
+  receiver_repr: anchor
+  source_repr: anchor                 # author's history + the judged message (weighted most)
+  recency_lambda: 3.0
+  max_hist: 50
+  shrink_kappa: 0.5
+features:
+  psych_csv: null                     # output of your Big Five / Schwartz / BPN pipeline
+model:
+  proj_dim: [8, 16]
+  l2_W: [0.3, 3.0]
+  l2_w: [1.0]
+  l2_b: [1.0, 10.0]
+  max_iter: 400
+  n_jobs: 8
+graph:
+  metapaths:
+    - {name: reply}
+    - {name: cothread, max_thread_users: 50}
+search:
+  k: 3                                # set to the k recommended by G3 (results/g3.json)
+  n_queries: 200
+  time_limit: 60                      # seconds per query for exact search
+  max_exact_size: 3000
+  n_proc: 8                           # parallel search processes
+  query_pool: test_active
+  latitude_model: full                # switch to global if G2 fails
+  cluster_k: 20
+  methods: [lcc_c_exact, lcc_c_greedy, lcc_c_ballcore_f, lcc_c_ballcore_r, lcc_r_exact, pairwise_c,
+            kcore, kr_global, edgeacc, cluster_q, random_bfs, lcc_c_exact@global]
+simulation:
+  n_jobs: 8

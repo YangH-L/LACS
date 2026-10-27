@@ -1,0 +1,19 @@
+# E11 / P2-4 (docs/PLANS.md (lacs_p2_plan_20261026) section 4) on round 4's Brightkite inputs. `p2.e11 prepare-inputs`
+# copies geo/ and graph/ of runs/brightkite (read-only) into out_dir first.
+#   PYTHONPATH=p0:. python -m p2.e11 run --config p2/configs/e11_brightkite.yaml --s 1.25
+# The multiplier s is given on the command line (it sets geo.theta_mult).
+name: e11_brightkite
+out_dir: runs_p2/e11/brightkite
+seed: 0                          # round 4's seed (no sampling here)
+geo:
+  tolerance_fixed: theta_q50     # round 4's main tolerance (G2's choice, fixed here)
+  queries: all                   # every eligible query (5,260); the pilot fallback concerns Gowalla only
+  engine_block: 240              # resumable engine blocks under out_dir/work (12 processes: <= 20 queries each)
+  methods: [lcc_exact]           # not used: p2.e11 run has fixed passes (exact; edgeacc + pairwise)
+  member_analysis: []
+  abstention: []
+search:
+  k: 3
+  n_queries: 2000
+  time_limit: 60                 # LCC (exact); p2.e11 run: exact 60 s, edgeacc + pairwise 10 s
+  n_proc: 12

@@ -1,0 +1,7 @@
+# GPU text encoder (encoder.backend: sbert). Install torch FIRST with a CUDA build
+# that supports your GPU; RTX 5090 (Blackwell, sm_120) needs a CUDA 12.8+ build, e.g.
+#   pip install torch --index-url https://download.pytorch.org/whl/cu128
+sentence-transformers>=2.7
+# optional
+# convokit          # download the ChangeMyView corpus
+# torch_geometric   # scripts/optional/sgcn_baseline.py

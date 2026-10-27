@@ -1,0 +1,31 @@
+# Round 4 (v0.4): re-evaluation of the finished Gowalla run (runs/gowalla); results go to
+# runs/gowalla/results/r4/ and nothing from round 3 is overwritten. Only geo-e2 and geo-e2-sweep accept
+# this file (geo-prepare / geo-gates refuse it). Pre-declared analysis plan: docs/PLANS.md (round-4 plan).
+#   python -m lacs geo-e2       -c configs/gowalla_r4.yaml
+#   python -m lacs geo-e2-sweep -c configs/gowalla_r4.yaml
+name: gowalla
+out_dir: runs/gowalla
+geo:
+  edges: data/raw/snap/loc-gowalla_edges.txt.gz
+  checkins: data/raw/snap/loc-gowalla_totalCheckins.txt.gz
+  split: [0.7, 0.1, 0.2]          # global time split of check-ins
+  min_train_checkins: 10          # users with fewer training check-ins get no home / tolerance
+  home_cell_deg: 0.25             # home = median position in the most frequent ~25 km cell
+  tolerance_quantiles: [0.5, 0.7, 0.9]   # candidate tolerances; G2-geo picks one by cross-fitting on validation co-visits
+  tolerance_floor_km: 1.0
+  max_bucket_users: 500           # venue-days with more users are skipped when finding co-visits
+  results_subdir: r4
+  queries: all                    # every test-active user in the k-core (round 3: a sample of 200)
+  methods: [lcc_exact, lcc_greedy, lcc_ballcore_f, lcc_ballcore_r, pairwise, kcore, kr_global, kr_tau, sac,
+            sac_sized, edgeacc, random_bfs]
+  member_analysis: [sac, kr_global, kr_tau]
+  abstention: [sac, kr_global]
+  e2_sweep_k: [2, 3, 4, 5]
+  e2_sweep_tolerances: [theta_q50, theta_q70, theta_q90]
+  sweep_tolerance_queries: 2000
+gates: {g3_min_median: 5}
+search:
+  k: 3
+  n_queries: 200
+  time_limit: 60
+  n_proc: 8

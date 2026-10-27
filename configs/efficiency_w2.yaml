@@ -1,0 +1,41 @@
+# W2 run A: E3 with engine v0.5 on the round-3 datasets and queries (CPU only, one engine process).
+#   python -m lacs e3 -c configs/efficiency_w2.yaml
+# Paths point into the round-3 project (read only); results go to runs/efficiency_w2 of this copy.
+# theta_scale_fixed reproduces round 3's calibrated scales, and with them every random draw: all
+# settings of round 3 get the same queries (the new extra scale runs last, after the dimensions).
+name: efficiency_w2
+out_dir: runs/efficiency_w2
+efficiency:
+  datasets:
+    - {name: gowalla, geo_run: runs/gowalla}
+    - {name: brightkite, geo_run: runs/brightkite}
+    - {name: livejournal, edges: data/raw/snap/com-lj.ungraph.txt, theta_scale_fixed: 1.5}
+    - {name: orkut, edges: data/raw/snap/com-orkut.ungraph.txt, theta_scale_fixed: 1.25}
+  algos: [kcore, ballcore_f, ballcore_r, greedy, exact, kr_greedy]
+  # default setting only, the same 50 queries as `exact` (k = 3): one component switched off at a time
+  ablation_algos: [exact_v04, exact_count, exact_indexcolor, exact_noorder, exact_noseed, exact_nocolorbound,
+                   exact_nocompat, exact_noedgefilter, exact_noindex, exact_nolocal, exact_basic, exact_cap20000]
+  attr_model: communities
+  community_max_size: 1000
+  query_min_community: 20
+  city_spacing: 8.0
+  theta_scale_default: auto
+  calibration_target: 10
+  calibration_queries: 30
+  calibration_time_limit: 5
+  calibration_scales: [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0]
+  calibration_refine: 2
+  default_k: 3
+  default_dim: 16
+  ks: [2, 3, 4, 5]
+  fractions: [0.25, 0.5, 0.75, 1.0]
+  dims: [2, 4, 8, 16, 32]
+  theta_scales: [0.5, 1.0, 2.0]
+  theta_scales_relative: true
+  theta_scales_extra: [3.0]           # v0.5: run after the dimension sweep (keeps round-3 draws)
+  theta_sigma: 0.4
+  n_queries: 50
+  time_limit: 60
+  n_proc: 1
+  resume: true
+  dataset_budget_h: 8.0               # priority: default k, ablations, other k, fractions, scales, dims, extra scales

@@ -1,0 +1,39 @@
+# E3 for the paper (round 3). Runs only the C++ engine (CPU), one engine process for clean timings.
+#   python -m lacs e3 -c configs/efficiency_round3.yaml
+# Needs runs/gowalla and runs/brightkite (python -m lacs geo-all ...) and the two SNAP graphs.
+name: efficiency_round3
+out_dir: runs/efficiency_round3
+efficiency:
+  datasets:
+    # real attributes: homes (km) and travel tolerances from the meetup application
+    - {name: gowalla, geo_run: runs/gowalla}
+    - {name: brightkite, geo_run: runs/brightkite}
+    # large graphs: community-aligned synthetic attributes (see lacs/experiments/e3.py)
+    - {name: livejournal, edges: data/raw/snap/com-lj.ungraph.txt}
+    - {name: orkut, edges: data/raw/snap/com-orkut.ungraph.txt}
+  algos: [kcore, ballcore_f, ballcore_r, greedy, exact, kr_greedy]
+  ablation_algos: [exact_noindex, exact_nolocal, exact_basic]   # default setting only, same queries
+  attr_model: communities
+  community_max_size: 1000
+  query_min_community: 20
+  city_spacing: 8.0
+  theta_scale_default: auto          # smallest scale whose median exact community has >= calibration_target members
+  calibration_target: 10
+  calibration_queries: 30            # the same queries at every scale
+  calibration_time_limit: 5
+  calibration_scales: [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0]
+  calibration_refine: 2              # bisection steps between the last failing and the first passing scale
+  default_k: 3
+  default_dim: 16
+  ks: [2, 3, 4, 5]
+  fractions: [0.25, 0.5, 0.75, 1.0]
+  dims: [2, 4, 8, 16, 32]            # synthetic attributes only
+  theta_scales: [0.5, 1.0, 2.0]
+  theta_scales_relative: true        # multiples of the calibrated (or real) tolerance
+  theta_sigma: 0.4
+  n_queries: 50
+  time_limit: 60                     # seconds per query for exact search
+  n_proc: 1
+  resume: true                       # after an interruption, rerun the same command: finished datasets are kept
+  dataset_budget_h: 3.0              # settings that would start later are skipped (priority: default k, ablations,
+                                     # other k, fractions, theta scales, dims)

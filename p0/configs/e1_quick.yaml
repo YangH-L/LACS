@@ -1,0 +1,19 @@
+# Short E1 configuration for the self-test and smoke runs (same kinds of variants, fewer runs and steps).
+seed: 20261023
+max_group: 3000
+ext_max_neighbors: 100
+defaults: {T_max: 150, rounds: 40, move_tol_rel: 1.0e-6, rel_eps: 1.0e-9, diam_every: 10,
+           cons_rel: 1.0e-3, cluster_rel: 1.0e-3}
+variants:
+  - {name: hk_eq_G,   model: hk, graph: G, weights: equal}
+  - {name: hk_eq_K,   model: hk, graph: K, weights: equal, max_n: 600}
+  - {name: hk_rand_K, model: hk, graph: K, weights: dirichlet, runs: 3, max_n: 200}
+  - {name: hk_rand_K_a0.1, model: hk, graph: K, weights: dirichlet, dirichlet_alpha: 0.1, runs: 3, max_n: 200}
+  - {name: follow_G,  model: follow, graph: G, gamma: 0.5, runs: 3}
+  - {name: follow_K,  model: follow, graph: K, gamma: 0.5, runs: 3, max_n: 200}
+  - {name: dw_G,      model: dw, graph: G, mu: 0.3, runs: 3, max_n: 600}
+  - {name: sjt_eq_G,  model: sjt, graph: G, weights: equal, acc_ratio: 0.5, beta: 0.05}
+  - {name: hk_eq_G_long, model: hk, graph: G, weights: equal, T_max: 600, move_tol_rel: 1.0e-12}
+  - {name: hk_open_G, model: hk, graph: G, weights: equal, open: true}
+  - {name: hk_eq_G_ext0.05, model: hk, graph: G, weights: equal, lambda_ext: 0.05}
+  - {name: hk_eq_G_noise0.2, model: hk, graph: G, weights: equal, theta_noise: 0.2, runs: 3}
