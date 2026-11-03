@@ -8,6 +8,10 @@ A *latitude-consistent community* (LCC) is a connected subgraph of minimum degre
 
 No dataset is included except the Congressional Twitter network (MIT licence, `e6/data/`). Every other dataset is downloaded from its official source (see [Data](#data)). In particular, **this repository does not contain or redistribute any part of the Yelp Open Dataset**; it contains only the scripts that process it.
 
+## Technical report
+
+The [full technical report](paper/LACS_technical_report.pdf) will be posted at this fixed location.
+
 ## Layout
 
 | Path | Contents |
