@@ -10,7 +10,7 @@ No dataset is included except the Congressional Twitter network (MIT licence, `e
 
 ## Technical report
 
-The [full technical report](paper/LACS_technical_report.pdf) will be posted at this fixed location.
+The [full technical report](full-technical-report/LACS_technical_report.pdf) is available here.
 
 ## Layout
 
