@@ -1,5 +1,7 @@
 # LACS: Community Search under Member-Specific Tolerances
 
+[简体中文](README.zh-CN.md)
+
 This repository contains the code, experiment drivers and analysis scripts for the paper
 
 > **Community Search under Member-Specific Tolerances** (ICDE 2027 submission). Technical report: [arXiv:2611.05951](https://arxiv.org/abs/2611.05951).
